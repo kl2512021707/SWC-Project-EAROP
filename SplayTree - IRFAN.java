@@ -76,7 +76,6 @@ public class SplayTree
         return rotateRight(root);
         }
 
-        // Value is on the right side
         else
         {
         if (root.right == null)
@@ -110,7 +109,6 @@ public class SplayTree
         return rotateLeft(root);
         }
     }
-         // Insert a value
     public void insert(int value)
     {
         if (root == null)
@@ -121,7 +119,6 @@ public class SplayTree
 
         root = splay(root, value);
 
-        // Do not insert duplicate values
         if (root.value == value)
         {
             return;
@@ -145,7 +142,6 @@ public class SplayTree
         root = newNode;
     }
 
-    // Search for a value
     public boolean search(int value)
     {
         root = splay(root, value);
