@@ -36,9 +36,8 @@ public class EmergencyAmbulanceOptimization
         return Arrays.toString(arr);
         }
 
-       // ============================================
+       
       // Backtracking Route Optimization
-      // ============================================
 
         static int bestBacktrackingCost;
         static String bestBacktrackingPath;
@@ -119,10 +118,9 @@ public class EmergencyAmbulanceOptimization
 
         return bestBacktrackingCost;
         }
-    // ============================================
+ 
     // Dynamic Programming Route Optimization
-    // ============================================
-
+    
         public static String dynamicProgrammingEAROP(int[][] dist)
         {
             int n = dist.length;
@@ -131,7 +129,6 @@ public class EmergencyAmbulanceOptimization
             int[][] memo = new int[n][1 << n];
             String[][] paths = new String[n][1 << n];
 
-            // Fill memo with -1 to show states not calculated yet
             for (int i = 0; i < n; i++)
             {
                 Arrays.fill(memo[i], -1);
