@@ -231,3 +231,88 @@ public class EmergencyAmbulanceOptimization {
             return root.value == value;
         }
     }
+
+    // =========================================================
+    // MAIN METHOD
+    // =========================================================
+    public static void main(String[] args) {
+
+        System.out.println(
+            "===== EMERGENCY AMBULANCE ROUTE OPTIMIZATION ====="
+        );
+
+        System.out.println();
+
+        // -----------------------------------------------------
+        // Route Optimization Algorithms
+        // -----------------------------------------------------
+
+        System.out.println(greedyEAROP(costMatrix));
+
+        System.out.println(
+            dynamicProgrammingEAROP(costMatrix)
+        );
+
+        System.out.println(
+            backtrackingEAROP(costMatrix)
+        );
+
+        System.out.println(
+            divideAndConquerEAROP(costMatrix)
+        );
+
+        System.out.println();
+
+        // -----------------------------------------------------
+        // Sorting and Searching
+        // -----------------------------------------------------
+
+        int[] arr = {8, 3, 5, 1, 9, 2};
+
+        insertionSort(arr);
+
+        System.out.println(
+            "Sorted Emergency Response Times: "
+            + Arrays.toString(arr)
+        );
+
+        System.out.println(
+            "Binary Search (Response Time 5 found at index): "
+            + binarySearch(arr, 5)
+        );
+
+        System.out.println();
+
+        // -----------------------------------------------------
+        // Min-Heap Test
+        // -----------------------------------------------------
+
+        MinHeap heap = new MinHeap();
+
+        heap.insert(10);
+        heap.insert(3);
+        heap.insert(15);
+
+        System.out.println(
+            "Min-Heap Extract Minimum Priority Value: "
+            + heap.extractMin()
+        );
+
+        System.out.println();
+
+        // -----------------------------------------------------
+        // Splay Tree Test
+        // -----------------------------------------------------
+
+        SplayTree tree = new SplayTree();
+
+        tree.insert(20);
+        tree.insert(10);
+        tree.insert(30);
+
+        System.out.println(
+            "Splay Tree Search (Emergency Case 10 found): "
+            + tree.search(10)
+        );
+    }
+}
