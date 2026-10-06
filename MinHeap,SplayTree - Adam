@@ -1,0 +1,233 @@
+import java.util.*;
+
+public class EmergencyAmbulanceOptimization {
+
+    // =========================================================
+    // Travel Cost Matrix
+    // =========================================================
+    static int[][] costMatrix = {
+        {0, 15, 25, 35},
+        {15, 0, 30, 28},
+        {25, 30, 0, 20},
+        {35, 28, 20, 0}
+    };
+
+    // Location names
+    static String[] locations = {
+        "Hospital",
+        "Emergency Location B",
+        "Emergency Location C",
+        "Emergency Location D"
+    };
+
+
+    // =========================================================
+    // 7. MIN-HEAP
+    // =========================================================
+    static class MinHeap {
+
+        private PriorityQueue<Integer> heap =
+            new PriorityQueue<>();
+
+        // Insert a value into the Min-Heap
+        public void insert(int value) {
+
+            heap.add(value);
+        }
+
+        // Remove and return the minimum value
+        public int extractMin() {
+
+            if (heap.isEmpty()) {
+                throw new NoSuchElementException(
+                    "Cannot extract from an empty Min-Heap."
+                );
+            }
+
+            return heap.poll();
+        }
+    }
+
+    // =========================================================
+    // 8. SPLAY TREE
+    // =========================================================
+    static class SplayTree {
+
+        private class Node {
+            int value;
+            Node left;
+            Node right;
+
+            Node(int value) {
+                this.value = value;
+            }
+        }
+
+        private Node root;
+
+        // Right rotation
+        private Node rotateRight(Node x) {
+
+            Node y = x.left;
+
+            if (y == null) {
+                return x;
+            }
+
+            x.left = y.right;
+            y.right = x;
+
+            return y;
+        }
+
+        // Left rotation
+        private Node rotateLeft(Node x) {
+
+            Node y = x.right;
+
+            if (y == null) {
+                return x;
+            }
+
+            x.right = y.left;
+            y.left = x;
+
+            return y;
+        }
+
+        // Splay operation
+        private Node splay(Node node, int value) {
+
+            if (node == null || node.value == value) {
+                return node;
+            }
+
+            // Value is in the left subtree
+            if (value < node.value) {
+
+                if (node.left == null) {
+                    return node;
+                }
+
+                // Zig-Zig
+                if (value < node.left.value) {
+
+                    node.left.left =
+                        splay(
+                            node.left.left,
+                            value
+                        );
+
+                    node =
+                        rotateRight(node);
+
+                // Zig-Zag
+                } else if (value > node.left.value) {
+
+                    node.left.right =
+                        splay(
+                            node.left.right,
+                            value
+                        );
+
+                    if (node.left.right != null) {
+                        node.left =
+                            rotateLeft(node.left);
+                    }
+                }
+
+                // Final Zig rotation
+                if (node.left == null) {
+                    return node;
+                }
+
+                return rotateRight(node);
+            }
+
+            // Value is in the right subtree
+            else {
+
+                if (node.right == null) {
+                    return node;
+                }
+
+                // Zag-Zag
+                if (value > node.right.value) {
+
+                    node.right.right =
+                        splay(
+                            node.right.right,
+                            value
+                        );
+
+                    node =
+                        rotateLeft(node);
+
+                // Zag-Zig
+                } else if (value < node.right.value) {
+
+                    node.right.left =
+                        splay(
+                            node.right.left,
+                            value
+                        );
+
+                    if (node.right.left != null) {
+                        node.right =
+                            rotateRight(node.right);
+                    }
+                }
+
+                // Final Zag rotation
+                if (node.right == null) {
+                    return node;
+                }
+
+                return rotateLeft(node);
+            }
+        }
+
+        // Insert a value into the Splay Tree
+        public void insert(int value) {
+
+            if (root == null) {
+                root = new Node(value);
+                return;
+            }
+
+            root = splay(root, value);
+
+            if (root.value == value) {
+                return;
+            }
+
+            Node newNode = new Node(value);
+
+            if (value < root.value) {
+
+                newNode.right = root;
+                newNode.left = root.left;
+                root.left = null;
+
+            } else {
+
+                newNode.left = root;
+                newNode.right = root.right;
+                root.right = null;
+            }
+
+            root = newNode;
+        }
+
+        // Search for a value
+        public boolean search(int value) {
+
+            if (root == null) {
+                return false;
+            }
+
+            root = splay(root, value);
+
+            return root.value == value;
+        }
+    }
