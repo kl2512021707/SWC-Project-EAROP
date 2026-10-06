@@ -1,0 +1,103 @@
+import java.util.PriorityQueue;
+import java.util.NoSuchElementException;
+
+public class MinHeapDemo
+{
+    // ==========================================
+    // Min-Heap Class
+    // ==========================================
+    static class MinHeap
+    {
+        private PriorityQueue<Integer> heap =
+            new PriorityQueue<Integer>();
+
+        // Insert a value into the Min-Heap
+        public void insert(int value)
+        {
+            if (value < 0)
+            {
+                throw new IllegalArgumentException(
+                    "Priority value cannot be negative"
+                );
+            }
+
+            heap.add(value);
+        }
+
+        // Remove and return the minimum value
+        public int extractMin()
+        {
+            if (heap.isEmpty())
+            {
+                throw new NoSuchElementException(
+                    "Heap is empty"
+                );
+            }
+
+            return heap.poll();
+        }
+
+        // View the minimum value without removing it
+        public int peekMin()
+        {
+            if (heap.isEmpty())
+            {
+                throw new NoSuchElementException(
+                    "Heap is empty"
+                );
+            }
+
+            return heap.peek();
+        }
+    }
+
+
+    // ==========================================
+    // Main Method
+    // ==========================================
+    public static void main(String[] args)
+    {
+        System.out.println("=================================");
+        System.out.println("       MIN-HEAP DEMONSTRATION");
+        System.out.println("=================================");
+
+        // Create Min-Heap
+        MinHeap heap = new MinHeap();
+
+        // Insert emergency priority values
+        System.out.println("\nInserting values:");
+
+        heap.insert(10);
+        System.out.println("Inserted: 10");
+
+        heap.insert(3);
+        System.out.println("Inserted: 3");
+
+        heap.insert(15);
+        System.out.println("Inserted: 15");
+
+        // Show minimum value
+        System.out.println(
+            "\nCurrent Minimum Value: "
+            + heap.peekMin()
+        );
+
+        // Extract minimum
+        int minimum = heap.extractMin();
+
+        System.out.println(
+            "Min-Heap Extract Minimum Priority Value: "
+            + minimum
+        );
+
+        // Show new minimum
+        System.out.println(
+            "New Minimum Value: "
+            + heap.peekMin()
+        );
+
+        System.out.println("\n=================================");
+        System.out.println("        PROGRAM COMPLETED");
+        System.out.println("=================================");
+    }
+}
