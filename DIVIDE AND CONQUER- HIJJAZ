@@ -1,0 +1,206 @@
+public class EmergencyAmbulanceOptimization
+{
+    // ============================================
+    // Travel Cost Matrix
+    // ============================================
+    static int[][] costMatrix = {
+        {0, 15, 25, 35},
+        {15, 0, 30, 28},
+        {25, 30, 0, 20},
+        {35, 28, 20, 0}
+    };
+
+    // ============================================
+    // Location Names
+    // ============================================
+    static String[] locations = {
+        "Hospital",
+        "Emergency Location B",
+        "Emergency Location C",
+        "Emergency Location D"
+    };
+
+    // Variables used to store the best route
+    static int bestDivideCost;
+    static String bestDividePath;
+
+
+    // ============================================
+    // Divide and Conquer Route Optimization
+    // ============================================
+    public static String divideAndConquerEAROP(int[][] dist)
+    {
+        // Check whether the matrix exists
+        if (dist == null || dist.length == 0)
+        {
+            return "Invalid cost matrix.";
+        }
+
+        int n = dist.length;
+
+        // Check whether the matrix is square
+        for (int i = 0; i < n; i++)
+        {
+            if (dist[i] == null || dist[i].length != n)
+            {
+                return "Invalid cost matrix.";
+            }
+        }
+
+        // Reset the best result
+        bestDivideCost = Integer.MAX_VALUE;
+        bestDividePath = "";
+
+        // Keep track of visited locations
+        boolean[] visited = new boolean[n];
+
+        // Hospital is the starting location
+        visited[0] = true;
+
+        // Store the current route
+        StringBuilder path = new StringBuilder();
+
+        path.append(locations[0]);
+
+        // Start the recursive Divide and Conquer process
+        divideAndConquerHelper(
+            0,
+            visited,
+            0,
+            dist,
+            n,
+            path
+        );
+
+        return "Divide & Conquer Route: "
+            + bestDividePath
+            + " | Total Cost: "
+            + bestDivideCost;
+    }
+
+
+    // ============================================
+    // Divide and Conquer Helper Method
+    // ============================================
+    private static int divideAndConquerHelper(
+        int pos,
+        boolean[] visited,
+        int currentCost,
+        int[][] dist,
+        int n,
+        StringBuilder path)
+    {
+        // Base case:
+        // All locations have been visited
+        if (allVisited(visited))
+        {
+            // Return to Hospital
+            int totalCost = currentCost + dist[pos][0];
+
+            String completePath =
+                path.toString()
+                + " -> "
+                + locations[0];
+
+            // Store the best route
+            if (totalCost < bestDivideCost)
+            {
+                bestDivideCost = totalCost;
+                bestDividePath = completePath;
+            }
+
+            return totalCost;
+        }
+
+        int minCost = Integer.MAX_VALUE;
+
+        // Divide the problem by trying
+        // every unvisited location
+        for (int next = 0; next < n; next++)
+        {
+            if (!visited[next])
+            {
+                // Visit the next location
+                visited[next] = true;
+
+                // Calculate new travelling cost
+                int newCost =
+                    currentCost + dist[pos][next];
+
+                // Save the current path length
+                int oldLength = path.length();
+
+                // Add the next location to the route
+                path.append(" -> ");
+                path.append(locations[next]);
+
+                // Recursively solve the smaller problem
+                int routeCost =
+                    divideAndConquerHelper(
+                        next,
+                        visited,
+                        newCost,
+                        dist,
+                        n,
+                        path
+                    );
+
+                // Keep the minimum route cost
+                if (routeCost < minCost)
+                {
+                    minCost = routeCost;
+                }
+
+                // Restore the previous state
+                path.setLength(oldLength);
+                visited[next] = false;
+            }
+        }
+
+        return minCost;
+    }
+
+
+    // ============================================
+    // Check Whether All Locations Are Visited
+    // ============================================
+    private static boolean allVisited(boolean[] visited)
+    {
+        for (boolean locationVisited : visited)
+        {
+            if (!locationVisited)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    // ============================================
+    // Main Method
+    // ============================================
+    public static void main(String[] args)
+    {
+        System.out.println("==========================================");
+        System.out.println(" EMERGENCY AMBULANCE ROUTE OPTIMIZATION");
+        System.out.println("==========================================");
+
+        System.out.println();
+        System.out.println("Algorithm: Divide and Conquer");
+        System.out.println();
+
+        // Run Divide and Conquer algorithm
+        String result =
+            divideAndConquerEAROP(costMatrix);
+
+        // Display result
+        System.out.println(result);
+
+        System.out.println();
+        System.out.println("==========================================");
+        System.out.println(" Program Completed");
+        System.out.println("==========================================");
+    }
+}
