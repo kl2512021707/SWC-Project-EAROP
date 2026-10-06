@@ -1,0 +1,79 @@
+import java.util.*;
+
+public class EmergencyAmbulanceOptimization {
+
+    // =========================================================
+    // Travel Cost Matrix
+    // =========================================================
+    static int[][] costMatrix = {
+        {0, 15, 25, 35},
+        {15, 0, 30, 28},
+        {25, 30, 0, 20},
+        {35, 28, 20, 0}
+    };
+
+    // Location names
+    static String[] locations = {
+        "Hospital",
+        "Emergency Location B",
+        "Emergency Location C",
+        "Emergency Location D"
+    };
+
+    // =========================================================
+    // 1. GREEDY ROUTE OPTIMIZATION
+    // =========================================================
+    public static String greedyEAROP(int[][] dist) {
+
+        validateCostMatrix(dist);
+
+        int n = dist.length;
+        boolean[] visited = new boolean[n];
+        StringBuilder path = new StringBuilder();
+
+        int current = 0;       // Hospital
+        int totalCost = 0;
+
+        visited[current] = true;
+        path.append(locations[current]);
+
+        // Select the cheapest unvisited location
+        for (int count = 1; count < n; count++) {
+
+            int next = -1;
+            int minCost = Integer.MAX_VALUE;
+
+            for (int i = 0; i < n; i++) {
+
+                if (!visited[i] && dist[current][i] < minCost) {
+                    minCost = dist[current][i];
+                    next = i;
+                }
+            }
+
+            if (next == -1) {
+                throw new IllegalStateException(
+                    "No valid next location was found."
+                );
+            }
+
+            visited[next] = true;
+            totalCost += minCost;
+
+            path.append(" -> ");
+            path.append(locations[next]);
+
+            current = next;
+        }
+
+        // Return to Hospital
+        totalCost += dist[current][0];
+
+        path.append(" -> ");
+        path.append(locations[0]);
+
+        return "Greedy Ambulance Route: "
+                + path
+                + " | Total Cost: "
+                + totalCost;
+    }
